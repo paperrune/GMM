@@ -1,6 +1,6 @@
 # GMM
 C++ implementation of Gaussian Mixture Model</br>
-Initialized by the K-means algorithm (left) and then trained by the EM algorithm (right).</br>
+Initialized by the [K-means algorithm](https://github.com/paperrune/KMeans) (left) and then trained by the EM algorithm (right).</br>
 
 The number of data : 100</br>
 ![100 KMeans](/capture/100_KMeans.png)
