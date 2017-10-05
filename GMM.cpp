@@ -221,8 +221,6 @@ double Gaussian_Mixture_Model::Gaussian_Distribution(double data[], double mean[
 	double result;
 	double sum = 0;
 		
-	double *partial_sum = new double[dimension_data];
-		
 	double **inversed_covariance = new double*[dimension_data];
 
 	Matrix matrix;
@@ -233,22 +231,18 @@ double Gaussian_Mixture_Model::Gaussian_Distribution(double data[], double mean[
 	matrix.Inverse(type_covariance, dimension_data, covariance, inversed_covariance);
 		
 	for(int i = 0;i < dimension_data;i++){
-		double sum = 0;
+		double partial_sum = 0;
 			
 		for(int j = 0;j < dimension_data;j++){
-			sum += (data[j] - mean[j]) * inversed_covariance[j][i];
+			partial_sum += (data[j] - mean[j]) * inversed_covariance[j][i];
 		}
-		partial_sum[i] = sum;
-	}
-	for(int i = 0;i < dimension_data;i++){
-		sum += partial_sum[i] * (data[i] - mean[i]);
+		sum += partial_sum * (data[i] - mean[i]);
 	}
 		
 	for(int i = 0;i < dimension_data;i++){
 		delete[] inversed_covariance[i];
 	}
 	delete[] inversed_covariance;
-	delete[] partial_sum;
 		
 	result = 1.0 / (pow(2 * 3.1415926535897931, dimension_data / 2.0) * sqrt(matrix.Determinant(type_covariance, dimension_data, covariance))) * exp(-0.5 * sum);
 		
