@@ -7,16 +7,16 @@
 #include "KMeans.h"
 #include "Matrix.h"
 
-Gaussian_Mixture_Model::Gaussian_Mixture_Model(char type_covariance[], int dimension_data, int number_gaussian_component){
+Gaussian_Mixture_Model::Gaussian_Mixture_Model(char type_covariance[], int dimension_data, int number_gaussian_components){
 	strcpy(this->type_covariance, type_covariance);
-	this->dimension_data			= dimension_data;
-	this->number_gaussian_component = number_gaussian_component;
+	this->dimension_data			 = dimension_data;
+	this->number_gaussian_components = number_gaussian_components;
 
-	covariance	= new double**[number_gaussian_component];
-	mean		= new double*[number_gaussian_component];
-	weight		= new double[number_gaussian_component];
+	covariance	= new double**[number_gaussian_components];
+	mean		= new double*[number_gaussian_components];
+	weight		= new double[number_gaussian_components];
 			
-	for(int i = 0;i < number_gaussian_component;i++){
+	for(int i = 0;i < number_gaussian_components;i++){
 		covariance[i]	= new double*[dimension_data];
 		mean[i]			= new double[dimension_data];
 			
@@ -26,7 +26,7 @@ Gaussian_Mixture_Model::Gaussian_Mixture_Model(char type_covariance[], int dimen
 	}
 }
 Gaussian_Mixture_Model::~Gaussian_Mixture_Model(){
-	for(int i = 0;i < number_gaussian_component;i++){
+	for(int i = 0;i < number_gaussian_components;i++){
 		for(int j = 0;j < dimension_data;j++){
 			delete[] covariance[i][j];
 		}
@@ -39,12 +39,12 @@ Gaussian_Mixture_Model::~Gaussian_Mixture_Model(){
 }
 
 void Gaussian_Mixture_Model::Initialize(int number_data, double **data){
-	KMeans kmeans = KMeans(dimension_data, number_gaussian_component);
+	KMeans kmeans = KMeans(dimension_data, number_gaussian_components);
 
 	kmeans.Initialize(number_data, data);
 	while(kmeans.Cluster(number_data, data));
 
-	for(int i = 0;i < number_gaussian_component;i++){
+	for(int i = 0;i < number_gaussian_components;i++){
 		for(int j = 0;j < dimension_data;j++){	
 			for(int k = 0;k < dimension_data;k++){
 				covariance[i][j][k] = (j == k);
@@ -53,24 +53,24 @@ void Gaussian_Mixture_Model::Initialize(int number_data, double **data){
 		for(int j = 0;j < dimension_data;j++){				
 			mean[i][j] = kmeans.centroid[i][j];
 		}
-		weight[i] = 1.0 / number_gaussian_component;
+		weight[i] = 1.0 / number_gaussian_components;
 	}
 }
 void Gaussian_Mixture_Model::Load_Parameter(char path[]){
 	FILE *file = fopen(path, "rt");
 
 	if(file){
-		for(int i = 0;i < number_gaussian_component;i++){
+		for(int i = 0;i < number_gaussian_components;i++){
 			fscanf(file, "%lf", &weight[i]);
 		}
 
-		for(int i = 0;i < number_gaussian_component;i++){
+		for(int i = 0;i < number_gaussian_components;i++){
 			for(int j = 0;j < dimension_data;j++){
 				fscanf(file, "%lf", &mean[i][j]);
 			}
 		}
 
-		for(int i = 0;i < number_gaussian_component;i++){
+		for(int i = 0;i < number_gaussian_components;i++){
 			for(int j = 0;j < dimension_data;j++){
 				for(int k = 0;k < dimension_data;k++){
 					fscanf(file, "%lf", &covariance[i][j][k]);
@@ -86,17 +86,17 @@ void Gaussian_Mixture_Model::Load_Parameter(char path[]){
 void Gaussian_Mixture_Model::Save_Parameter(char path[]){
 	FILE *file = fopen(path, "wt");
 
-	for(int i = 0;i < number_gaussian_component;i++){
+	for(int i = 0;i < number_gaussian_components;i++){
 		fprintf(file, "%f\n", weight[i]);
 	}
 
-	for(int i = 0;i < number_gaussian_component;i++){
+	for(int i = 0;i < number_gaussian_components;i++){
 		for(int j = 0;j < dimension_data;j++){
 			fprintf(file, "%f\n", mean[i][j]);
 		}
 	}
 
-	for(int i = 0;i < number_gaussian_component;i++){
+	for(int i = 0;i < number_gaussian_components;i++){
 		for(int j = 0;j < dimension_data;j++){
 			for(int k = 0;k < dimension_data;k++){
 				fprintf(file, "%f\n", covariance[i][j][k]);
@@ -111,7 +111,7 @@ int Gaussian_Mixture_Model::Classify(double data[]){
 
 	double max = 0;
 		
-	for(int i = 0;i < number_gaussian_component;i++){
+	for(int i = 0;i < number_gaussian_components;i++){
 		double likelihood = weight[i] * Gaussian_Distribution(data, i);
 
 		if(max < likelihood){
@@ -125,7 +125,7 @@ int Gaussian_Mixture_Model::Classify(double data[]){
 double Gaussian_Mixture_Model::Calculate_Likelihood(double data[]){
 	double likelihood = 0;
 		
-	for(int i = 0;i < number_gaussian_component;i++){
+	for(int i = 0;i < number_gaussian_components;i++){
 		likelihood += weight[i] * Gaussian_Distribution(data, i);
 	}
 	return likelihood;
@@ -133,7 +133,7 @@ double Gaussian_Mixture_Model::Calculate_Likelihood(double data[]){
 double Gaussian_Mixture_Model::Calculate_Likelihood(double data[], double gaussian_distribution[]){
 	double likelihood = 0;
 		
-	for(int i = 0;i < number_gaussian_component;i++){
+	for(int i = 0;i < number_gaussian_components;i++){
 		likelihood += weight[i] * gaussian_distribution[i];
 	}
 	return likelihood;
@@ -141,14 +141,14 @@ double Gaussian_Mixture_Model::Calculate_Likelihood(double data[], double gaussi
 double Gaussian_Mixture_Model::Expectaion_Maximization(int number_data, double **data){
 	double log_likelihood = 0;
 
-	double *gaussian_distribution	= new double[number_gaussian_component];
-	double *sum_likelihood			= new double[number_gaussian_component];
+	double *gaussian_distribution	= new double[number_gaussian_components];
+	double *sum_likelihood			= new double[number_gaussian_components];
 		
-	double **new_mean = new double*[number_gaussian_component];
+	double **new_mean = new double*[number_gaussian_components];
 		
-	double ***new_covariance = new double**[number_gaussian_component];
+	double ***new_covariance = new double**[number_gaussian_components];
 		
-	for(int i = 0;i < number_gaussian_component;i++){
+	for(int i = 0;i < number_gaussian_components;i++){
 		new_mean[i]			= new double[dimension_data];
 		new_covariance[i]	= new double*[dimension_data];
 			
@@ -157,7 +157,7 @@ double Gaussian_Mixture_Model::Expectaion_Maximization(int number_data, double *
 		}
 	}
 
-	for(int i = 0;i < number_gaussian_component;i++){
+	for(int i = 0;i < number_gaussian_components;i++){
 		for(int j = 0;j < dimension_data;j++){
 			for(int k = 0;k < dimension_data;k++){
 				new_covariance[i][j][k] = 0;
@@ -170,10 +170,10 @@ double Gaussian_Mixture_Model::Expectaion_Maximization(int number_data, double *
 	for(int i = 0;i < number_data;i++){
 		double sum = 0;
 				
-		for(int j = 0;j < number_gaussian_component;j++){
+		for(int j = 0;j < number_gaussian_components;j++){
 			sum += weight[j] * (gaussian_distribution[j] = Gaussian_Distribution(data[i], mean[j], covariance[j]));
 		}
-		for(int j = 0;j < number_gaussian_component;j++){
+		for(int j = 0;j < number_gaussian_components;j++){
 			double likelihood = weight[j] * gaussian_distribution[j] / sum;
 
 			for(int k = 0;k < dimension_data;k++){
@@ -186,7 +186,7 @@ double Gaussian_Mixture_Model::Expectaion_Maximization(int number_data, double *
 		}
 	}
 
-	for(int i = 0;i < number_gaussian_component;i++){						
+	for(int i = 0;i < number_gaussian_components;i++){						
 		for(int j = 0;j < dimension_data;j++){
 			for(int k = 0;k < dimension_data;k++){
 				covariance[i][j][k] = new_covariance[i][j][k] / sum_likelihood[i];
@@ -200,7 +200,7 @@ double Gaussian_Mixture_Model::Expectaion_Maximization(int number_data, double *
 		log_likelihood += log(Calculate_Likelihood(data[i]));
 	}
 		
-	for(int i = 0;i < number_gaussian_component;i++){
+	for(int i = 0;i < number_gaussian_components;i++){
 		for(int j = 0;j < dimension_data;j++){
 			delete[] new_covariance[i][j];
 		}
