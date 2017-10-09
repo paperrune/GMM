@@ -1,11 +1,11 @@
 class KMeans{
 private:
 	int dimension_data;
-	int number_cluster;
+	int number_clusters;
 public:
 	double **centroid;
 
-	KMeans(int dimension_data, int number_cluster);
+	KMeans(int dimension_data, int number_clusters);
 	~KMeans();
 
 	// forgy method
