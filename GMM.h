@@ -3,7 +3,7 @@ private:
 	char type_covariance[16];
 
 	int dimension_data;
-	int number_gaussian_component;
+	int number_gaussian_components;
 public:
 	double *weight;
 	
@@ -11,7 +11,7 @@ public:
 
 	double ***covariance;
 
-	Gaussian_Mixture_Model(char type_covariance[], int dimension_data, int number_gaussian_component);
+	Gaussian_Mixture_Model(char type_covariance[], int dimension_data, int number_gaussian_components);
 	~Gaussian_Mixture_Model();
 
 	void Initialize(int number_data, double **data);
