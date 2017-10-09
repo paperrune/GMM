@@ -5,25 +5,25 @@
 #include "Matrix.h"
 
 Matrix::Matrix(){
-	number_row		= 0;
-	number_column	= 0;
+	number_rows		= 0;
+	number_columns	= 0;
 		
 	index_M = new int*[0];
 	index_N = new int*[0];
 }
 Matrix::~Matrix(){
-	for(int i = 0;i < number_column;i++){
+	for(int i = 0;i < number_columns;i++){
 		delete[] index_N[i];
 	}
-	for(int i = 0;i < number_row;i++){
+	for(int i = 0;i < number_rows;i++){
 		delete[] index_M[i];
 	}
 	delete[] index_M;
 	delete[] index_N;
 }
 
-void Matrix::Inverse(char type_matrix[], int number_row, float **M, float **N){
-	int m = number_row;
+void Matrix::Inverse(char type_matrix[], int number_rows, float **M, float **N){
+	int m = number_rows;
 
 	if(m == 1){
 		N[0][0] = 1 / M[0][0];
@@ -149,8 +149,8 @@ void Matrix::Inverse(char type_matrix[], int number_row, float **M, float **N){
 		}
 	}
 }
-void Matrix::Inverse(char type_matrix[], int number_row, double **M, double **N){
-	int m = number_row;
+void Matrix::Inverse(char type_matrix[], int number_rows, double **M, double **N){
+	int m = number_rows;
 
 	if(m == 1){
 		N[0][0] = 1 / M[0][0];
@@ -276,10 +276,10 @@ void Matrix::Inverse(char type_matrix[], int number_row, double **M, double **N)
 		}
 	}
 }
-void Matrix::Multiplication(int M_row, int M_column, int N_column, float **M, float **N, float **O){
-	int m = M_row;
-	int n = N_column;
-	int o = M_column;
+void Matrix::Multiplication(int M_rows, int M_columns, int N_columns, float **M, float **N, float **O){
+	int m = M_rows;
+	int n = N_columns;
+	int o = M_columns;
 		
 	int **index_M = new int*[m];
 	int **index_N = new int*[n];
@@ -351,10 +351,10 @@ void Matrix::Multiplication(int M_row, int M_column, int N_column, float **M, fl
 	delete[] index_N;
 	delete[] T;
 }
-void Matrix::Multiplication(int M_row, int M_column, int N_column, double **M, double **N, double **O){
-	int m = M_row;
-	int n = N_column;
-	int o = M_column;
+void Matrix::Multiplication(int M_rows, int M_columns, int N_columns, double **M, double **N, double **O){
+	int m = M_rows;
+	int n = N_columns;
+	int o = M_columns;
 		
 	int **index_M = new int*[m];
 	int **index_N = new int*[n];
@@ -426,9 +426,9 @@ void Matrix::Multiplication(int M_row, int M_column, int N_column, double **M, d
 	delete[] index_N;
 	delete[] T;
 }
-void Matrix::Transpose(int number_row, int number_column, float **M, float **N){
-	int m = number_row;
-	int n = number_column;
+void Matrix::Transpose(int number_rows, int number_columns, float **M, float **N){
+	int m = number_rows;
+	int n = number_columns;
 		
 	float **T = new float*[m];
 		
@@ -452,9 +452,9 @@ void Matrix::Transpose(int number_row, int number_column, float **M, float **N){
 	}
 	delete[] T;
 }
-void Matrix::Transpose(int number_row, int number_column, double **M, double **N){
-	int m = number_row;
-	int n = number_column;
+void Matrix::Transpose(int number_rows, int number_columns, double **M, double **N){
+	int m = number_rows;
+	int n = number_columns;
 		
 	double **T = new double*[m];
 		
@@ -479,8 +479,65 @@ void Matrix::Transpose(int number_row, int number_column, double **M, double **N
 	delete[] T;
 }
 
-float Matrix::Determinant(char type_matrix[], int number_row, float **M){
-	int m = number_row;
+int Matrix::LU_Decomposition(int number_rows, float **M, float **L, float **U){
+	int m = number_rows;
+		
+	for(int i = 0;i < m;i++){
+		L[i][i] = 1;
+		 
+		for(int j = i;j < m;j++){
+		    float sum = 0;
+		        
+		    for(int k = 0;k <= i - 1;k++){
+		        sum += L[i][k] * U[k][j];
+		    }
+		    U[i][j] = M[i][j] - sum;
+		}
+		for(int j = i + 1;j < m;j++){
+		    float sum = 0;
+
+		    for(int k = 0;k <= i - 1;k++){
+		        sum += L[j][k] * U[k][i];
+		    }
+			if(U[i][i] == 0){
+				return 0;
+			}
+			L[j][i] = (M[j][i] - sum) / U[i][i];
+		}
+	}
+	return 1;
+}
+int Matrix::LU_Decomposition(int number_rows, double **M, double **L, double **U){
+	int m = number_rows;
+		
+	for(int i = 0;i < m;i++){
+		L[i][i] = 1;
+		 
+		for(int j = i;j < m;j++){
+		    double sum = 0;
+		        
+		    for(int k = 0;k <= i - 1;k++){
+		        sum += L[i][k] * U[k][j];
+		    }
+		    U[i][j] = M[i][j] - sum;
+		}
+		for(int j = i + 1;j < m;j++){
+		    double sum = 0;
+
+		    for(int k = 0;k <= i - 1;k++){
+		        sum += L[j][k] * U[k][i];
+		    }
+			if(U[i][i] == 0){
+				return 0;
+			}
+			L[j][i] = (M[j][i] - sum) / U[i][i];
+		}
+	}
+	return 1;
+}
+
+float Matrix::Determinant(char type_matrix[], int number_rows, float **M){
+	int m = number_rows;
 		
 	float determinant = 1;
 		
@@ -555,36 +612,9 @@ float Matrix::Determinant(char type_matrix[], int number_row, float **M){
 	}		
 	return determinant;
 }
-float Matrix::LU_Decomposition(int number_row, float **M, float **L, float **U){
-	int m = number_row;
-		
-	for(int i = 0;i < m;i++){
-		L[i][i] = 1;
-		 
-		for(int j = i;j < m;j++){
-		    float sum = 0;
-		        
-		    for(int k = 0;k <= i - 1;k++){
-		        sum += L[i][k] * U[k][j];
-		    }
-		    U[i][j] = M[i][j] - sum;
-		}
-		for(int j = i + 1;j < m;j++){
-		    float sum = 0;
 
-		    for(int k = 0;k <= i - 1;k++){
-		        sum += L[j][k] * U[k][i];
-		    }
-			if(U[i][i] == 0){
-				return 0;
-			}
-			L[j][i] = (M[j][i] - sum) / U[i][i];
-		}
-	}
-}
-
-double Matrix::Determinant(char type_matrix[], int number_row, double **M){
-	int m = number_row;
+double Matrix::Determinant(char type_matrix[], int number_rows, double **M){
+	int m = number_rows;
 		
 	double determinant = 1;
 		
@@ -658,31 +688,4 @@ double Matrix::Determinant(char type_matrix[], int number_row, double **M){
 		}
 	}		
 	return determinant;
-}
-double Matrix::LU_Decomposition(int number_row, double **M, double **L, double **U){
-	int m = number_row;
-		
-	for(int i = 0;i < m;i++){
-		L[i][i] = 1;
-		 
-		for(int j = i;j < m;j++){
-		    double sum = 0;
-		        
-		    for(int k = 0;k <= i - 1;k++){
-		        sum += L[i][k] * U[k][j];
-		    }
-		    U[i][j] = M[i][j] - sum;
-		}
-		for(int j = i + 1;j < m;j++){
-		    double sum = 0;
-
-		    for(int k = 0;k <= i - 1;k++){
-		        sum += L[j][k] * U[k][i];
-		    }
-			if(U[i][i] == 0){
-				return 0;
-			}
-			L[j][i] = (M[j][i] - sum) / U[i][i];
-		}
-	}
 }
