@@ -3,26 +3,26 @@
 
 #include "KMeans.h"
 
-KMeans::KMeans(int dimension_data, int number_cluster){
-	this->dimension_data = dimension_data;
-	this->number_cluster = number_cluster;
+KMeans::KMeans(int dimension_data, int number_clusters){
+	this->dimension_data	= dimension_data;
+	this->number_clusters	= number_clusters;
 
-	centroid = new double*[number_cluster];
+	centroid = new double*[number_clusters];
 
-	for(int i = 0;i < number_cluster;i++){
+	for(int i = 0;i < number_clusters;i++){
 		centroid[i] = new double[dimension_data];
 	}
 }
 KMeans::~KMeans(){
-	for(int i = 0;i < number_cluster;i++){
+	for(int i = 0;i < number_clusters;i++){
 		delete[] centroid[i];
 	}
 	delete[] centroid;
 }
 
 void KMeans::Initialize(int number_data, double **data){
-	for(int i = 0;i < number_cluster;i++){
-		int number_sample = number_data / number_cluster;
+	for(int i = 0;i < number_clusters;i++){
+		int number_sample = number_data / number_clusters;
 
 		for(int j = 0;j < dimension_data;j++){
 			double sum = 0;
@@ -40,7 +40,7 @@ int KMeans::Classify(double data[]){
 
 	double min = -1;
 
-	for(int j = 0;j < number_cluster;j++){
+	for(int j = 0;j < number_clusters;j++){
 		double distance = 0;
 				
 		for(int k = 0;k < dimension_data;k++){
@@ -67,7 +67,7 @@ double KMeans::Cluster(int number_data, double **data){
 		label[i] = Classify(data[i]);
 	}
 
-	for(int j = 0;j < number_cluster;j++){
+	for(int j = 0;j < number_clusters;j++){
 		int number_sample = 0;
 
 		double movements = 0;
