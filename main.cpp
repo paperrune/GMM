@@ -31,7 +31,7 @@ int main(){
 		if(i == 0) GMM.Initialize(number_data, data);
 
 		log_likelihood = GMM.Expectaion_Maximization(number_data, data);
-		printf("%d	%lf\n", i + 1, log_likelihood);
+		if((i + 1) % 10 == 0) printf("%d	%lf\n", i + 1, log_likelihood);
 	}
 
 	printf("\nmean\n");
