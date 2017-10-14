@@ -1,14 +1,15 @@
 class Gaussian_Mixture_Model{
 private:
-	char type_covariance[16];
-
 	int dimension_data;
 	int number_gaussian_components;
 public:
+	char type_covariance[16];
+
 	double *weight;
 	
 	double **mean;
 
+	double **diagonal_covariance;
 	double ***covariance;
 
 	Gaussian_Mixture_Model(char type_covariance[], int dimension_data, int number_gaussian_components);
@@ -24,5 +25,6 @@ public:
 	double Calculate_Likelihood(double data[], double gaussian_distribution[]);
 	double Expectaion_Maximization(int number_data, double **data);
 	double Gaussian_Distribution(double data[], int component_index);
+	double Gaussian_Distribution(double data[], double mean[], double diagonal_covariance[]);
 	double Gaussian_Distribution(double data[], double mean[], double **covariance);
 };
