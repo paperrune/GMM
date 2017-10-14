@@ -1,10 +1,10 @@
 class Gaussian_Mixture_Model{
 private:
+	char type_covariance[16];
+
 	int dimension_data;
 	int number_gaussian_components;
 public:
-	char type_covariance[16];
-
 	double *weight;
 	
 	double **mean;
