@@ -4,6 +4,8 @@
 #include "GMM.h"
 
 int main(){
+	char type_covariance[] = "full"; // <-> "diagonal"
+	
 	int dimension_data		= 2;
 	int number_data			= 300;
 	int number_iterations	= 100;
@@ -14,7 +16,7 @@ int main(){
 
 	FILE *file;
 
-	Gaussian_Mixture_Model GMM = Gaussian_Mixture_Model("full", dimension_data, number_gaussian_components);
+	Gaussian_Mixture_Model GMM = Gaussian_Mixture_Model(type_covariance, dimension_data, number_gaussian_components);
 
 	for(int i = 0;i < number_data;i++){
 		double position[] = {0.25, 0.75};
