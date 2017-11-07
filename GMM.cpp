@@ -193,8 +193,8 @@ double Gaussian_Mixture_Model::Expectaion_Maximization(int number_data, double *
 		
 	double **new_mean = new double*[number_gaussian_components];
 
-	double **new_diagonal_covariance;
-	double ***new_covariance;
+	double **new_diagonal_covariance = 0;
+	double ***new_covariance = 0;
 		
 	for(int i = 0;i < number_gaussian_components;i++){
 		new_mean[i] = new double[dimension_data];
