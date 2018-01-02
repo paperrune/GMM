@@ -426,9 +426,9 @@ void Matrix::Multiplication(int M_rows, int M_columns, int N_columns, double **M
 	delete[] index_N;
 	delete[] T;
 }
-void Matrix::Transpose(int number_rows, int number_columns, float **M, float **N){
-	int m = number_rows;
-	int n = number_columns;
+void Matrix::Transpose(int N_rows, int N_columns, float **M, float **N){
+	int m = N_rows;
+	int n = N_columns;
 		
 	float **T = new float*[m];
 		
@@ -452,9 +452,9 @@ void Matrix::Transpose(int number_rows, int number_columns, float **M, float **N
 	}
 	delete[] T;
 }
-void Matrix::Transpose(int number_rows, int number_columns, double **M, double **N){
-	int m = number_rows;
-	int n = number_columns;
+void Matrix::Transpose(int N_rows, int N_columns, double **M, double **N){
+	int m = N_rows;
+	int n = N_columns;
 		
 	double **T = new double*[m];
 		
