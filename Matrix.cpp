@@ -30,7 +30,7 @@ void Matrix::Inverse(char type_matrix[], int number_rows, float **M, float **N){
 	}
 	else
 	if(m >= 2){
-		if(strcmp(type_matrix, "diagonal") == 0){
+		if(!strcmp(type_matrix, "diagonal")){
 			for(int i = 0;i < m;i++){
 				for(int j = 0;j < m;j++){
 					N[i][j] = (i == j) ? (1 / M[i][j]):(0);
@@ -38,7 +38,7 @@ void Matrix::Inverse(char type_matrix[], int number_rows, float **M, float **N){
 			}
 		}
 		else
-		if(strcmp(type_matrix, "block-diagonal") == 0){				
+		if(!strcmp(type_matrix, "block-diagonal")){				
 			int recent_index = 0;
 				
 			for(int i = 0;i < m;i++){
@@ -83,7 +83,7 @@ void Matrix::Inverse(char type_matrix[], int number_rows, float **M, float **N){
 			}
 		}
 		else
-		if(strcmp(type_matrix, "full") == 0){
+		if(!strcmp(type_matrix, "full")){
 			float **T = new float*[m];
 				
 			for(int i = 0;i < m;i++){
@@ -157,7 +157,7 @@ void Matrix::Inverse(char type_matrix[], int number_rows, double **M, double **N
 	}
 	else
 	if(m >= 2){
-		if(strcmp(type_matrix, "diagonal") == 0){
+		if(!strcmp(type_matrix, "diagonal")){
 			for(int i = 0;i < m;i++){
 				for(int j = 0;j < m;j++){
 					N[i][j] = (i == j) ? (1 / M[i][j]):(0);
@@ -165,7 +165,7 @@ void Matrix::Inverse(char type_matrix[], int number_rows, double **M, double **N
 			}
 		}
 		else
-		if(strcmp(type_matrix, "block-diagonal") == 0){				
+		if(!strcmp(type_matrix, "block-diagonal") ){				
 			int recent_index = 0;
 				
 			for(int i = 0;i < m;i++){
@@ -210,7 +210,7 @@ void Matrix::Inverse(char type_matrix[], int number_rows, double **M, double **N
 			}
 		}
 		else
-		if(strcmp(type_matrix, "full") == 0){
+		if(!strcmp(type_matrix, "full")){
 			double **T = new double*[m];
 				
 			for(int i = 0;i < m;i++){
