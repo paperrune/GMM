@@ -1,23 +1,27 @@
+#include <string>
+
+using namespace std;
+
 class Gaussian_Mixture_Model{
 private:
-	char type_covariance[16];
+	string type_covariance;
 
 	int dimension_data;
 	int number_gaussian_components;
 public:
 	double *weight;
-	
+
 	double **mean;
 
 	double **diagonal_covariance;
 	double ***covariance;
 
-	Gaussian_Mixture_Model(char type_covariance[], int dimension_data, int number_gaussian_components);
+	Gaussian_Mixture_Model(string type_covariance, int dimension_data, int number_gaussian_components);
 	~Gaussian_Mixture_Model();
 
 	void Initialize(int number_data, double **data);
-	void Load_Parameter(char path[]);
-	void Save_Parameter(char path[]);
+	void Load_Parameter(string path);
+	void Save_Parameter(string path);
 
 	int Classify(double data[]);
 
