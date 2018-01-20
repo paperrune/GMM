@@ -5,9 +5,9 @@
 int main(){
 	string type_covariance = "full"; // <-> "diagonal"
 
-	int dimension_data		= 2;
-	int number_data			= 100;
-	int number_iterations	= 999;
+	int dimension_data = 2;
+	int number_data = 100;
+	int number_iterations = 999;
 
 	int number_gaussian_components = 4;
 
