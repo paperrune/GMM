@@ -7,7 +7,7 @@ int main(){
 
 	int dimension_data = 2;
 	int number_data = 100;
-	int number_iterations = 999;
+	int number_iterations = 200;
 
 	int number_gaussian_components = 4;
 
